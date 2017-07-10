@@ -14,6 +14,8 @@ const userInput = (firstArg, secondArg, thirdArg) => {
     case 'list' :
       queries.list()
       break
+    default : 
+      console.log('Command Not Found')
   }
 }
 

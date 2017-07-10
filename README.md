@@ -4,13 +4,13 @@ Create a command line todo-list script, that stores the tasks in a SQL database.
 
 ## Specs:
 
-- [ ] Tasks are persisted in a Postgres database
-- [ ] Schema for the database exists in a file schema.sql
-- [ ] Npm scripts exists to setup the database
-- [ ] list command has been implemented
-- [ ] add command has been implemented
-- [ ] delete command has been implemented
-- [ ] update command has been implemented
-- [ ] Script returns a Command Not Found message when the user enters an invalid command
+- [X] Tasks are persisted in a Postgres database
+- [X] Schema for the database exists in a file schema.sql
+- [X] Npm scripts exists to setup the database
+- [X] list command has been implemented
+- [X] add command has been implemented
+- [X] delete command has been implemented
+- [X] update command has been implemented
+- [X] Script returns a Command Not Found message when the user enters an invalid command
 - [ ] A separate test database exists for SQL tests
 - [ ] All SQL functions are tested with mocha and chai
