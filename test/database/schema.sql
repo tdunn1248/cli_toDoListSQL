@@ -1,0 +1,6 @@
+DROP TABLE IF EXISTS toDoList;
+CREATE TABLE toDoList (
+  id SERIAL PRIMARY KEY,
+  task VARCHAR,
+  complete BOOLEAN
+);

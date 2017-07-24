@@ -1,5 +1,11 @@
 const pgp = require('pg-promise')()
-const connectionString = 'postgres://rover@localhost:5432/cliToDo'
+require('dotenv').config()
+let connectionString
+if(process.env.NODE_ENV === 'development') {
+  connectionString = process.env.DATABASE_URL
+} else {
+  connectionString = process.env.TEST_DATABASE_URL
+}
 const db = pgp(connectionString)
 
 function add(listItem) {
@@ -7,9 +13,7 @@ function add(listItem) {
   .then(() => {
     console.log('Created task');
   })
-  .catch(error => {
-    console.log(error);
-  })
+  .catch(e => console.error(e))
  }
 
 function update(id, task) {
@@ -35,6 +39,7 @@ function done(id) {
 function list() {
   db.any("SELECT * FROM toDoList")
   .then((list) => {
+    console.log('??', typeof list);
     console.log('ID  ', 'Description')
     console.log('--  ',' -----------');
     list.forEach((item) => {
