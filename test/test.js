@@ -16,9 +16,9 @@ describe('database queries', function() {
   context('database functions: ', () => {
 
     it('adds(): adds a record to db', () => {
-      var string = "learn how to code"
+      var string = 'code on'
       return add(string).then((str) => {
-        expect(str.task).to.equal('learn how to code')
+        expect(str.task).to.equal('code on')
       })
     })
 
@@ -31,18 +31,18 @@ describe('database queries', function() {
     })
 
     it('update(): should updated database record task with specified id', function() {
-      return update(currentIds[0], "munch on a whopper")
+      return update(currentIds[0], 'munch on a whopper')
         .then(results => {
-        expect(results).to.be.eql({id: results.id, task: results.task})
-        expect(results).to.be.an('object')
+          expect(results).to.be.eql({id: results.id, task: results.task})
+          expect(results).to.be.an('object')
       })
     })
 
     it('done(): should delete database record with a specifed id', function() {
       return done(currentIds[1])
         .then(deleted => {
-        expect(deleted).to.be.eql({id: deleted.id, task: deleted.task})
-        expect(deleted).to.be.an('object')
+          expect(deleted).to.be.eql({id: deleted.id, task: deleted.task})
+          expect(deleted).to.be.an('object')
       })
     })
   })

@@ -9,11 +9,11 @@ const db = pgp(connectionString)
 
 function add(listItem) {
   return db.one("INSERT INTO todolist(task, complete) VALUES( $1, $2) RETURNING id,task", [listItem, false])
-  .then((task) => {
-    const addedTask = {
-      id: task.id,
-      task: task.task
-    }
+    .then((task) => {
+      const addedTask = {
+        id: task.id,
+        task: task.task
+      }
     return addedTask
   })
   .catch(e => console.error(e))
@@ -21,11 +21,11 @@ function add(listItem) {
 
 function update(id, task) {
   return db.any("UPDATE todolist SET task = $2 where id = $1 RETURNING id,task", [id, task])
-  .then((listItem) => {
-    const updatedTodo = {
-      id : listItem[0].id,
-      task: listItem[0].task
-    }
+    .then((listItem) => {
+      const updatedTodo = {
+        id : listItem[0].id,
+        task: listItem[0].task
+      }
     return updatedTodo
   })
   .catch(error => {
@@ -35,11 +35,11 @@ function update(id, task) {
 
 function done(id) {
   return db.one('DELETE FROM toDoList WHERE id = $1 RETURNING id, task', [id])
-  .then((deleted) => {
-    const deletedTask = {
-      id : deleted.id,
-      task: deleted.task
-    }
+    .then((deleted) => {
+      const deletedTask = {
+        id : deleted.id,
+        task: deleted.task
+      }
     return deletedTask
   })
   .catch(error => {
