@@ -14,7 +14,7 @@ function add(listItem) {
       id: task.id,
       task: task.task
     }
-    return addedTask;
+    return addedTask
   })
   .catch(e => console.error(e))
  }
@@ -29,7 +29,7 @@ function update(id, task) {
     return updatedTodo
   })
   .catch(error => {
-    console.log(error);
+    console.log(error)
   })
 }
 
@@ -43,7 +43,7 @@ function done(id) {
     return deletedTask
   })
   .catch(error => {
-    console.log(error);
+    console.log(error)
   })
 }
 
