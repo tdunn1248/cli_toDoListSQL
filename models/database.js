@@ -6,20 +6,22 @@ if(process.env.NODE_ENV === 'development') {
 } else {
   connectionString = process.env.TEST_DATABASE_URL
 }
+
 const db = pgp(connectionString)
 
 function add(listItem) {
-  db.none("INSERT INTO todolist(task, complete) VALUES( $1, $2)", [listItem, false])
-  .then(() => {
-    console.log('Created task');
+  return db.one("INSERT INTO todolist(task, complete) VALUES( $1, $2) RETURNING task", [listItem, false])
+  .then((task) => {
+    return task;
   })
   .catch(e => console.error(e))
  }
 
+
 function update(id, task) {
-  db.none("UPDATE todolist SET task = $2 where id = $1", [id, task])
-  .then(() => {
-    console.log('Updated task');
+  return db.none("UPDATE todolist SET task = $2 where id = $1 RETURNING id,task;", [id, task])
+  .then((listItem) => {
+    return listItem
   })
   .catch(error => {
     console.log(error);
@@ -29,7 +31,7 @@ function update(id, task) {
 function done(id) {
   db.one('DELETE FROM toDoList WHERE id = $1', [id])
   .then(() => {
-    console.log('Completed the task ' )
+    console.log('Completed the task ')
   })
   .catch(error => {
     console.log(error);
@@ -37,24 +39,29 @@ function done(id) {
 }
 
 function list() {
-  db.any("SELECT * FROM toDoList")
-  .then((list) => {
-    console.log('??', typeof list);
-    console.log('ID  ', 'Description')
-    console.log('--  ',' -----------');
-    list.forEach((item) => {
-      if (item.complete == false)
-      console.log(item.id, item.task)
-    })
-  })
+  return db.any("SELECT * FROM toDoList")
+  .then(list => list)
   .catch(error => {
     console.log(error)
   })
+}
+
+function clearDatabase() {
+  return db.any("DELETE FROM todolist").then(console.log('test database was cleared'))
+}
+
+function seedData() {
+  return db.any("INSERT INTO toDoList VALUES(default, 'buy milk', FALSE ) RETURNING task")
+  .then((insertedTask) => insertedTask.forEach(function(task) {
+    console.log(task);
+  }))
 }
 
 module.exports = {
   add,
   update,
   done,
-  list
+  list,
+  clearDatabase,
+  seedData
 }

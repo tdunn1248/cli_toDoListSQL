@@ -4,6 +4,3 @@ CREATE TABLE toDoList (
   task VARCHAR,
   complete BOOLEAN
 );
-
-INSERT INTO toDoList VALUES(default, 'buy milk', FALSE );
-INSERT INTO toDoList VALUES(default, 'blah', FALSE );
