@@ -1,27 +1,32 @@
 const pgp = require('pg-promise')()
 require('dotenv').config()
 let connectionString
-if(process.env.NODE_ENV === 'development') {
-  connectionString = process.env.DATABASE_URL
-} else {
-  connectionString = process.env.TEST_DATABASE_URL
-}
+
+(process.env.NODE_ENV === 'development') ? connectionString = process.env.DATABASE_URL :
+connectionString = process.env.TEST_DATABASE_URL
 
 const db = pgp(connectionString)
 
 function add(listItem) {
-  return db.one("INSERT INTO todolist(task, complete) VALUES( $1, $2) RETURNING task", [listItem, false])
+  return db.one("INSERT INTO todolist(task, complete) VALUES( $1, $2) RETURNING id,task", [listItem, false])
   .then((task) => {
-    return task;
+    const addedTask = {
+      id: task.id,
+      task: task.task
+    }
+    return addedTask;
   })
   .catch(e => console.error(e))
  }
 
-
 function update(id, task) {
-  return db.none("UPDATE todolist SET task = $2 where id = $1 RETURNING id,task;", [id, task])
+  return db.any("UPDATE todolist SET task = $2 where id = $1 RETURNING id,task", [id, task])
   .then((listItem) => {
-    return listItem
+    const updatedTodo = {
+      id : listItem[0].id,
+      task: listItem[0].task
+    }
+    return updatedTodo
   })
   .catch(error => {
     console.log(error);
@@ -29,9 +34,13 @@ function update(id, task) {
 }
 
 function done(id) {
-  db.one('DELETE FROM toDoList WHERE id = $1', [id])
-  .then(() => {
-    console.log('Completed the task ')
+  return db.one('DELETE FROM toDoList WHERE id = $1 RETURNING id, task', [id])
+  .then((deleted) => {
+    const deletedTask = {
+      id : deleted.id,
+      task: deleted.task
+    }
+    return deletedTask
   })
   .catch(error => {
     console.log(error);
@@ -50,18 +59,10 @@ function clearDatabase() {
   return db.any("DELETE FROM todolist").then(console.log('test database was cleared'))
 }
 
-function seedData() {
-  return db.any("INSERT INTO toDoList VALUES(default, 'buy milk', FALSE ) RETURNING task")
-  .then((insertedTask) => insertedTask.forEach(function(task) {
-    console.log(task);
-  }))
-}
-
 module.exports = {
   add,
   update,
   done,
   list,
-  clearDatabase,
-  seedData
+  clearDatabase
 }
